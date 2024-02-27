@@ -29,6 +29,11 @@ public class Role {
         this.name = name;
         this.description = description;
     }
+
+    public Role(Integer id) {
+        this.id = id;
+    }
+
     @Override
     public final boolean equals(Object o) {
         if (this == o) return true;
@@ -44,4 +49,5 @@ public class Role {
     public final int hashCode() {
         return this instanceof HibernateProxy ? ((HibernateProxy) this).getHibernateLazyInitializer().getPersistentClass().hashCode() : getClass().hashCode();
     }
+
 }
