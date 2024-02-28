@@ -31,9 +31,7 @@ public class UserService {
         encodePassword(user);
         userRepository.save(user);
     }
-    public List<Role> listRoles() {
-        return (List<Role>) roleRepository.findAll();
-    }
+
     private void encodePassword(User user){
         String encodedPassword = passwordEncoder.encode(user.getPassword());
         user.setPassword(encodedPassword);

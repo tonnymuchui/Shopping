@@ -28,7 +28,7 @@ public class UserController {
     }
     @GetMapping("/users/new")
     public String newUser(Model model) {
-        List<Role> listRoles = userService.listRoles();
+        List<Role> listRoles = userService.listAllRoles();
 
         User user = new User();
         user.setEnabled(true);
