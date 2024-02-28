@@ -38,7 +38,7 @@ public class User {
     @ManyToMany
     @JoinTable(name = "users_roles", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
     @ToString.Exclude
-    private Set<Role> role = new HashSet<>();
+    private Set<Role> roles = new HashSet<>();
 
     public User(String email, String password, String firstName, String lastName) {
         this.email = email;
@@ -47,6 +47,6 @@ public class User {
         this.lastName = lastName;
     }
     public void addRole(Role role){
-        this.role.add(role);
+        this.roles.add(role);
     }
 }
