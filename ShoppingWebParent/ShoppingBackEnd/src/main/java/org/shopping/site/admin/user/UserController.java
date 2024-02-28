@@ -1,6 +1,7 @@
 package org.shopping.site.admin.user;
 
 
+import org.shopping.entity.Role;
 import org.shopping.entity.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -25,5 +26,17 @@ public class UserController {
         model.addAttribute("listUsers", listUsers);
         return "users";
     }
-}
+    @GetMapping("/users/new")
+    public String newUser(Model model) {
+        List<Role> listRoles = userService.listRoles();
 
+        User user = new User();
+        user.setEnabled(true);
+
+        model.addAttribute("user", user);
+        model.addAttribute("listRoles", listRoles);
+        model.addAttribute("pageTitle", "Create New User");
+
+        return "user_form";
+    }
+}
