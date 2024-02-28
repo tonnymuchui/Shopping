@@ -9,9 +9,6 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.test.annotation.Rollback;
 
-import java.util.Collections;
-import java.util.Set;
-
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 @DataJpaTest
@@ -73,7 +70,7 @@ public class UserRepositoryTests {
         Role roleEditor = new Role(3);
         Role roleSalesperson = new Role(2);
 
-        user.getRole().remove(roleEditor);
+        user.getRoles().remove(roleEditor);
         user.addRole(roleSalesperson);
 
         userRepository.save(user);
