@@ -49,4 +49,8 @@ public class User {
     public void addRole(Role role){
         this.roles.add(role);
     }
+    public String getPhotoImagePath(){
+        if (id == null || photos == null) return "/images/default-image.png";
+        return "/user-photos/" + this.id + "/" + this.photos;
+    }
 }
