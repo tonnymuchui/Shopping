@@ -6,10 +6,10 @@ Multi-module e-commerce Spring-boot project: Manage user, product, and order dat
 #### Screenshots
 
 <p align="center">
-<img align="left" width="250" src="./ShoppingWebParent/ShoppingBackEnd/src/main/resources/static/images/databasedesign.png" alt="home" />
-<img align="centre" width="250" src="./ShoppingWebParent/ShoppingBackEnd/src/main/resources/static/images/backend.png" alt="search" />
-<img align="left" width="250" src="./ShoppingWebParent/ShoppingBackEnd/src/main/resources/static/images/visitor.png" alt="categories" />
-<img align="centre" width="250" src="./ShoppingWebParent/ShoppingBackEnd/src/main/resources/static/images/backendusecase.png" alt="categories" />
+<img align="left" width="250" src="ShoppingWebParent/ShoppingBackEnd/src/main/resources/static/images/databasedesign.png" alt="home" />
+<img align="centre" width="250" src="ShoppingWebParent/ShoppingBackEnd/src/main/resources/static/images/backend.png" alt="search" />
+<img align="left" width="250" src="ShoppingWebParent/ShoppingBackEnd/src/main/resources/static/images/visitor.png" alt="categories" />
+<img align="centre" width="250" src="ShoppingWebParent/ShoppingBackEnd/src/main/resources/static/images/backendusecase.png" alt="categories" />
 <p>
 
 ## Security and Performance Features
