@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Set;
 
 @Getter
@@ -46,11 +47,30 @@ public class User {
         this.firstName = firstName;
         this.lastName = lastName;
     }
+    @Transient
     public void addRole(Role role){
         this.roles.add(role);
     }
     public String getPhotoImagePath(){
         if (id == null || photos == null) return "/images/default-image.png";
         return "/user-photos/" + this.id + "/" + this.photos;
+    }
+
+    @Transient
+    public String getFullName() {
+        return firstName + " " + lastName;
+    }
+
+    public boolean hasRole(String roleName) {
+        Iterator<Role> iterator = roles.iterator();
+
+        while (iterator.hasNext()) {
+            Role role = iterator.next();
+            if (role.getName().equals(roleName)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }
