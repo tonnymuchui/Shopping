@@ -12,6 +12,9 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
+import java.security.SecureRandom;
+import java.util.Base64;
+
 @Configuration
 @EnableWebSecurity
 public class WebSecurityConfig {
@@ -35,12 +38,20 @@ public class WebSecurityConfig {
                         .deleteCookies("JSESSIONID") // Delete cookies on logout
                 )
                 .rememberMe(rememberMe -> rememberMe
-                        .key("uniqueAndSecret") // Key to identify remember-me tokens (change this value to a unique and secret key)
+                        .key(generateUniqueAndSecretKey()) // Key to identify remember-me tokens (change this value to a unique and secret key)
                         .tokenValiditySeconds(86400) // Token validity duration (in seconds) - 86400 seconds = 1 day
                 );
         return httpSecurity.build();
     }
+    private String generateUniqueAndSecretKey() {
+        // Generate a random byte array as the secret key
+        byte[] secretKey = new byte[32];
+        SecureRandom secureRandom = new SecureRandom();
+        secureRandom.nextBytes(secretKey);
 
+        // Encode the byte array to Base64 for better representation
+        return Base64.getEncoder().encodeToString(secretKey);
+    }
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
