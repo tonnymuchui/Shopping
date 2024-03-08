@@ -33,6 +33,10 @@ public class WebSecurityConfig {
                         .logoutSuccessUrl("/login") // Redirect to login page after logout
                         .invalidateHttpSession(true) // Invalidate session on logout
                         .deleteCookies("JSESSIONID") // Delete cookies on logout
+                )
+                .rememberMe(rememberMe -> rememberMe
+                        .key("uniqueAndSecret") // Key to identify remember-me tokens (change this value to a unique and secret key)
+                        .tokenValiditySeconds(86400) // Token validity duration (in seconds) - 86400 seconds = 1 day
                 );
         return httpSecurity.build();
     }
