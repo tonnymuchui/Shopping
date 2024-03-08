@@ -1,16 +1,13 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
 	xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
-<head th:replace="fragments :: page_head('Home - Shopme Admin', 'none')" />
+<head th:replace="fragments :: page_head('Error - Shopme Admin', 'none')" />
+</head>
 <body>
 <div class="container-fluid">
 	<div th:replace="navigation :: menu"></div>
-	<div>
-		<h2>Shopme Control Panel</h2>
-		Welcome 
-		<a th:href="@{/account}" 
-			sec:authentication="principal.fullname"></a>	
-		<span sec:authentication="principal.authorities"></span>		
+	<div class="m-3">
+		<h2>Sorry, an unexpected error has occurred</h2>		
 	</div>
 
 	<div th:replace="fragments :: footer"></div>
