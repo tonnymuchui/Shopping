@@ -3,7 +3,12 @@ package org.shopping.site.admin.user;
 import jakarta.transaction.Transactional;
 import org.shopping.entity.Role;
 import org.shopping.entity.User;
+import org.shopping.site.admin.paging.PagingAndSortingHelper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -14,6 +19,7 @@ import java.util.Optional;
 @Service
 @Transactional
 public class UserService {
+    public static final int USERS_PER_PAGE = 4;
 
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
@@ -26,7 +32,7 @@ public class UserService {
     }
 
     public List<User> listAllUsers() {
-        return (List<User>) userRepository.findAll();
+        return (List<User>) userRepository.findAll(Sort.by("firstName").ascending());
     }
     public List<Role> listAllRoles(){
         return (List<Role>) roleRepository.findAll();
@@ -107,5 +113,8 @@ public class UserService {
 
     public void updateUserEnabledStatus(Integer id, boolean enabled) {
         userRepository.updateEnabledStatus(id, enabled);
+    }
+    public void listByPage(int pageNum, PagingAndSortingHelper helper) {
+        helper.listEntities(pageNum, USERS_PER_PAGE, userRepository);
     }
 }
