@@ -1,10 +1,17 @@
 package org.shopping.site.admin.user;
 
 
+import jakarta.servlet.http.HttpServletResponse;
 import org.shopping.entity.Role;
 import org.shopping.entity.User;
+import org.shopping.site.admin.export.UserCsvExporter;
+import org.shopping.site.admin.export.UserExcelExporter;
+import org.shopping.site.admin.export.UserPdfExporter;
+import org.shopping.site.admin.paging.PagingAndSortingHelper;
+import org.shopping.site.admin.paging.PagingAndSortingParam;
 import org.shopping.site.admin.util.FileUploadUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
@@ -15,13 +22,14 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
 @Controller
 public class UserController {
-
+    private final String defaultRedirectURL = "redirect:/users/page/1?sortField=firstName&sortDir=asc";
     private final UserService userService;
 
     @Autowired
@@ -29,11 +37,21 @@ public class UserController {
         this.userService = userService;
     }
 
-    @GetMapping("users")
-    public String listAll(Model model){
-        List<User> listUsers = userService.listAllUsers();
-        model.addAttribute("listUsers", listUsers);
-        return "users";
+    @GetMapping("/users")
+    public String listFirstPage() {
+        return defaultRedirectURL;
+    }
+    @GetMapping("/users/page/{pageNum}")
+    public String listByPage(
+            @PagingAndSortingParam(listName = "listUsers", moduleURL = "/users") PagingAndSortingHelper helper,
+            @PathVariable(name = "pageNum") int pageNum) {
+        userService.listByPage(pageNum, helper);
+
+        return "users/users";
+    }
+    private String getRedirectURLtoAffectedUser(User user) {
+        String firstPartOfEmail = user.getEmail().split("@")[0];
+        return "redirect:/users/page/1?sortField=id&sortDir=asc&keyword=" + firstPartOfEmail;
     }
     @PostMapping("/users/save")
     public String saveUser(User user, RedirectAttributes redirectAttributes, @RequestParam("image") MultipartFile multipartFile) throws Exception {
@@ -48,8 +66,9 @@ public class UserController {
             if (user.getPhotos().isEmpty()) user.setPhotos(null);
             userService.save(user);
         }
-        redirectAttributes.addFlashAttribute("message", "The user has been saved successfully");
-        return "redirect:/users";
+        redirectAttributes.addFlashAttribute("message", "The user has been saved successfully.");
+
+        return getRedirectURLtoAffectedUser(user);
     }
 
     @GetMapping("/users/new")
@@ -63,7 +82,7 @@ public class UserController {
         model.addAttribute("listRoles", listRoles);
         model.addAttribute("pageTitle", "Create New User");
 
-        return "user_form";
+        return "users/user_form";
     }
     @GetMapping("/users/edit/{id}")
     public String editUser(@PathVariable(name = "id") Integer id,
@@ -77,10 +96,10 @@ public class UserController {
             model.addAttribute("pageTitle", "Edit User (ID: " + id + ")");
             model.addAttribute("listRoles", listRoles);
 
-            return "user_form";
+            return "users/user_form";
         } catch (UserNotFoundException ex) {
             redirectAttributes.addFlashAttribute("message", ex.getMessage());
-            return "user_form";
+            return "users/user_form";
         }
     }
     @GetMapping("/users/delete/{id}")
@@ -95,7 +114,7 @@ public class UserController {
             redirectAttributes.addFlashAttribute("message", ex.getMessage());
         }
 
-        return "user_form";
+        return "users/user_form";
     }
     @GetMapping("/users/{id}/enabled/{status}")
     public String updateUserEnabledStatus(@PathVariable("id") Integer id,
@@ -105,6 +124,28 @@ public class UserController {
         String message = "The user ID " + id + " has been " + status;
         redirectAttributes.addFlashAttribute("message", message);
 
-        return "user_form";
+        return "users/user_form";
+    }
+
+    @GetMapping("/users/export/csv")
+    public void exportToCSV(HttpServletResponse response) throws Exception {
+        List<User> listUsers = userService.listAllUsers();
+        UserCsvExporter exporter = new UserCsvExporter();
+        exporter.export(listUsers, response);
+    }
+    @GetMapping("/users/export/excel")
+    public void exportToExcel(HttpServletResponse response) throws Exception {
+        List<User> listUsers = userService.listAllUsers();
+
+        UserExcelExporter exporter = new UserExcelExporter();
+        exporter.export(listUsers, response);
+    }
+
+    @GetMapping("/users/export/pdf")
+    public void exportToPDF(HttpServletResponse response) throws Exception {
+        List<User> listUsers = userService.listAllUsers();
+
+        UserPdfExporter exporter = new UserPdfExporter();
+        exporter.export(listUsers, response);
     }
 }
