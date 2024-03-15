@@ -32,7 +32,8 @@ public class WebSecurityConfig {
     SecurityFilterChain configureHttpSecurity(HttpSecurity httpSecurity) throws Exception {
         httpSecurity.authorizeHttpRequests(auth -> auth
                         .requestMatchers("/login").permitAll() // Permit all access to the login page
-                        .anyRequest().authenticated() // All other requests need to be authenticated
+                        .requestMatchers("categories").hasAnyAuthority("Admin", "Editor")
+                        .anyRequest().authenticated() //All other requests need to be authenticated
                 )
                 .formLogin(form -> form
                         .loginPage("/login")
