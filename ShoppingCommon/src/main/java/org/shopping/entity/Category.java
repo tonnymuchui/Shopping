@@ -24,7 +24,7 @@ public class Category {
     @Column(length = 128, nullable = false, unique = true)
     private String alias;
     @Column(length = 128,nullable = false)
-    private String Image;
+    private String image;
     private boolean enabled;
     @OneToOne
     @JoinColumn(name = "parent_id")
@@ -32,4 +32,19 @@ public class Category {
     @OneToMany(mappedBy = "parent")
     @ToString.Exclude
     private Set<Category> children = new HashSet<>();
+
+    public Category(Integer id) {
+        super();
+        this.id = id;
+    }
+    public Category(String name) {
+        super();
+        this.name = name;
+        this.alias = name;
+        this.image = "default.png";
+    }
+    public Category(String name, Category parent) {
+        this(name);
+        this.parent = parent;
+    }
 }
